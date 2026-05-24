@@ -2,6 +2,15 @@
 
 A lightweight Flutter prototype that ranks advertiser ads by tier + proximity + fairness, displays them in a scrollable feed, and logs impressions/clicks locally with Hive.
 
+---
+
+## What this is
+
+It started as a tiny ad-ranking demo: ten advertisers, three tiers (Gold/Silver/Bronze), a proximity term, and a starvation safeguard so the cheapest tier still gets shown. That works, but it tells the algorithm story in a vacuum — there's no signal that the *user* matters to the ranker.
+
+To close that loop, the feed was reshaped into an Instagram-style social stream: ~100 organic posts (food, coffee, fashion, travel, fitness, tech, beauty, books) interleaved with sponsored ads at a 4:1 cadence. Tapping the heart on a post feeds a per-category interest profile. The ranking algorithm gains a new term (`interest_match`) that boosts ads in the categories you've been liking — *combined* with the existing tier and proximity weights, not replacing them.
+
+The **Liked** tab makes the loop visible. It shows the current interest profile as percentage chips (e.g. `☕ Coffee · 67% · 🍴 Food · 33%`) and the posts you've liked. When you switch back to Home and refresh, the next ad slot reflects that profile — a coffee chain ad jumps ahead of a same-tier tech ad even though both pay the same. The pitch: the algorithm learns what you care about, and the ads it picks reflect that, on top of whatever the advertiser paid.
 
 ---
 
