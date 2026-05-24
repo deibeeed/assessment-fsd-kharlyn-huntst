@@ -9,3 +9,6 @@ const Duration kStarvationWindow = Duration(minutes: 5);
 
 /// How many ads to show in the feed.
 const int kFeedSize = 10;
+
+/// Mixed feed cadence: 1 ad inserted after every N organic posts.
+const int kPostsPerAd = 4;
