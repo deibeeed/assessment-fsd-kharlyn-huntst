@@ -7,29 +7,34 @@ class AnalyticsState extends Equatable {
   const AnalyticsState({
     this.impressionsByAd = const {},
     this.clicksByAd = const {},
+    this.impressionsByPost = const {},
   });
 
   final Map<String, int> impressionsByAd;
   final Map<String, int> clicksByAd;
+  final Map<String, int> impressionsByPost;
 
   AnalyticsState copyWith({
     Map<String, int>? impressionsByAd,
     Map<String, int>? clicksByAd,
+    Map<String, int>? impressionsByPost,
   }) {
     return AnalyticsState(
       impressionsByAd: impressionsByAd ?? this.impressionsByAd,
       clicksByAd: clicksByAd ?? this.clicksByAd,
+      impressionsByPost: impressionsByPost ?? this.impressionsByPost,
     );
   }
 
   @override
-  List<Object?> get props => [impressionsByAd, clicksByAd];
+  List<Object?> get props => [impressionsByAd, clicksByAd, impressionsByPost];
 }
 
 class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
   AnalyticsBloc(this._repository) : super(const AnalyticsState()) {
     on<ImpressionRecorded>(_onImpression);
     on<ClickRecorded>(_onClick);
+    on<PostImpressionRecorded>(_onPostImpression);
   }
 
   final EventRepository _repository;
@@ -52,5 +57,15 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
     final next = Map<String, int>.from(state.clicksByAd);
     next.update(event.adId, (v) => v + 1, ifAbsent: () => 1);
     emit(state.copyWith(clicksByAd: next));
+  }
+
+  Future<void> _onPostImpression(
+    PostImpressionRecorded event,
+    Emitter<AnalyticsState> emit,
+  ) async {
+    await _repository.recordPostImpression(event.postId);
+    final next = Map<String, int>.from(state.impressionsByPost);
+    next.update(event.postId, (v) => v + 1, ifAbsent: () => 1);
+    emit(state.copyWith(impressionsByPost: next));
   }
 }

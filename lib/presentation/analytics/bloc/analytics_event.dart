@@ -19,3 +19,10 @@ class ClickRecorded extends AnalyticsEvent {
   @override
   List<Object?> get props => [adId];
 }
+
+class PostImpressionRecorded extends AnalyticsEvent {
+  const PostImpressionRecorded(this.postId);
+  final String postId;
+  @override
+  List<Object?> get props => [postId];
+}

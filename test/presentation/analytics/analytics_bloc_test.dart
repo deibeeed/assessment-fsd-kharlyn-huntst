@@ -14,6 +14,7 @@ void main() {
     repo = _MockEventRepository();
     when(() => repo.recordImpression(any())).thenAnswer((_) async {});
     when(() => repo.recordClick(any())).thenAnswer((_) async {});
+    when(() => repo.recordPostImpression(any())).thenAnswer((_) async {});
   });
 
   blocTest<AnalyticsBloc, AnalyticsState>(
@@ -52,6 +53,18 @@ void main() {
       const AnalyticsState(impressionsByAd: {'ad-1': 1}),
       const AnalyticsState(impressionsByAd: {'ad-1': 2}),
       const AnalyticsState(impressionsByAd: {'ad-1': 2, 'ad-2': 1}),
+    ],
+  );
+
+  blocTest<AnalyticsBloc, AnalyticsState>(
+    'calls recordPostImpression and increments post counter',
+    build: () => AnalyticsBloc(repo),
+    act: (b) => b.add(const PostImpressionRecorded('post-7')),
+    verify: (_) {
+      verify(() => repo.recordPostImpression('post-7')).called(1);
+    },
+    expect: () => [
+      const AnalyticsState(impressionsByPost: {'post-7': 1}),
     ],
   );
 }
