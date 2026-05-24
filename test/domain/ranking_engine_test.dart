@@ -2,7 +2,6 @@ import 'package:ad_ranking_prototype/data/models/ad.dart';
 import 'package:ad_ranking_prototype/data/models/ad_event.dart';
 import 'package:ad_ranking_prototype/data/models/user_location.dart';
 import 'package:ad_ranking_prototype/domain/ranking/ranking_engine.dart';
-import 'package:ad_ranking_prototype/domain/ranking/ranking_weights.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -24,7 +23,7 @@ void main() {
         longitude: lng ?? userManila.longitude,
       );
 
-  final engine = RankingEngine();
+  const engine = RankingEngine();
   final now = DateTime(2026, 5, 24, 12, 0, 0);
 
   group('RankingEngine.rank', () {
