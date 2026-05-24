@@ -3,15 +3,24 @@ import 'package:ad_ranking_prototype/data/repositories/event_repository.dart';
 import 'package:hive/hive.dart';
 
 class HiveEventRepository implements EventRepository {
-  HiveEventRepository(this._box);
+  HiveEventRepository({
+    required Box<AdEvent> adEventBox,
+    required Box<AdEvent> postEventBox,
+  })  : _adEventBox = adEventBox,
+        _postEventBox = postEventBox;
 
-  static const String boxName = 'ad_events';
+  static const String adEventBoxName = 'ad_events';
+  static const String postEventBoxName = 'post_events';
 
-  final Box<AdEvent> _box;
+  // Backwards-compat alias for any caller still using the old name.
+  static const String boxName = adEventBoxName;
+
+  final Box<AdEvent> _adEventBox;
+  final Box<AdEvent> _postEventBox;
 
   @override
   Future<void> recordImpression(String adId) async {
-    await _box.add(
+    await _adEventBox.add(
       AdEvent(
         adId: adId,
         type: EventType.impression,
@@ -22,7 +31,7 @@ class HiveEventRepository implements EventRepository {
 
   @override
   Future<void> recordClick(String adId) async {
-    await _box.add(
+    await _adEventBox.add(
       AdEvent(
         adId: adId,
         type: EventType.click,
@@ -33,9 +42,9 @@ class HiveEventRepository implements EventRepository {
 
   @override
   Future<void> recordPostImpression(String postId) async {
-    await _box.add(
+    await _postEventBox.add(
       AdEvent(
-        adId: 'post:$postId',
+        adId: postId,
         type: EventType.impression,
         timestamp: DateTime.now(),
       ),
@@ -44,6 +53,6 @@ class HiveEventRepository implements EventRepository {
 
   @override
   Future<List<AdEvent>> getEventsSince(DateTime since) async {
-    return _box.values.where((e) => e.timestamp.isAfter(since)).toList();
+    return _adEventBox.values.where((e) => e.timestamp.isAfter(since)).toList();
   }
 }

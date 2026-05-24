@@ -31,13 +31,20 @@ Future<void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(AdEventAdapter());
   Hive.registerAdapter(PostLikeAdapter());
-  final eventBox =
-      await Hive.openBox<AdEvent>(HiveEventRepository.boxName);
+  final adEventBox = await Hive.openBox<AdEvent>(
+    HiveEventRepository.adEventBoxName,
+  );
+  final postEventBox = await Hive.openBox<AdEvent>(
+    HiveEventRepository.postEventBoxName,
+  );
   final reactionBox =
       await Hive.openBox<PostLike>(HiveReactionRepository.boxName);
 
   final adRepository = MockAdRepository();
-  final eventRepository = HiveEventRepository(eventBox);
+  final eventRepository = HiveEventRepository(
+    adEventBox: adEventBox,
+    postEventBox: postEventBox,
+  );
   const locationRepository = LocationRepository();
   final postRepository = MockPostRepository();
   final reactionRepository = HiveReactionRepository(reactionBox);
