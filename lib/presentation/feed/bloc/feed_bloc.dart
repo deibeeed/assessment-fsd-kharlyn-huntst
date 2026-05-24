@@ -30,15 +30,16 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   Future<void> _onRequested(FeedRequested event, Emitter<FeedState> emit) async {
     emit(const FeedLoading());
     try {
+      final now = DateTime.now();
       final ads = await _adRepository.getAll();
       final events = await _eventRepository.getEventsSince(
-        DateTime.now().subtract(kImpressionDecayWindow),
+        now.subtract(kImpressionDecayWindow),
       );
       final ranked = _rankingEngine.rank(
         ads: ads,
         userLocation: _currentLocation,
         events: events,
-        now: DateTime.now(),
+        now: now,
         limit: kFeedSize,
       );
       emit(FeedLoaded(ranked));
