@@ -38,16 +38,16 @@ Future<void> main() async {
 
   final adRepository = MockAdRepository();
   final eventRepository = HiveEventRepository(eventBox);
-  final reactionRepository = HiveReactionRepository(reactionBox);
-  final postRepository = MockPostRepository();
   const locationRepository = LocationRepository();
+  final postRepository = MockPostRepository();
+  final reactionRepository = HiveReactionRepository(reactionBox);
 
   runApp(AdRankingApp(
     adRepository: adRepository,
     eventRepository: eventRepository,
-    reactionRepository: reactionRepository,
-    postRepository: postRepository,
     locationRepository: locationRepository,
+    postRepository: postRepository,
+    reactionRepository: reactionRepository,
   ));
 }
 
@@ -56,16 +56,16 @@ class AdRankingApp extends StatelessWidget {
     super.key,
     required this.adRepository,
     required this.eventRepository,
-    required this.reactionRepository,
-    required this.postRepository,
     required this.locationRepository,
+    required this.postRepository,
+    required this.reactionRepository,
   });
 
   final AdRepository adRepository;
   final EventRepository eventRepository;
-  final ReactionRepository reactionRepository;
-  final PostRepository postRepository;
   final LocationRepository locationRepository;
+  final PostRepository postRepository;
+  final ReactionRepository reactionRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -75,11 +75,10 @@ class AdRankingApp extends StatelessWidget {
           create: (_) => LocationCubit(locationRepository),
         ),
         BlocProvider(
-          create: (_) => ReactionCubit(reactionRepository),
+          create: (_) => PostBloc(postRepository)..add(const PostRequested()),
         ),
         BlocProvider(
-          create: (_) =>
-              PostBloc(postRepository)..add(const PostRequested()),
+          create: (_) => ReactionCubit(reactionRepository),
         ),
         BlocProvider(
           create: (context) => InterestCubit(
