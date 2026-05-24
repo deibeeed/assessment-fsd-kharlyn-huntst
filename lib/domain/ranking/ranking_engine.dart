@@ -4,6 +4,7 @@ import 'package:ad_ranking_prototype/core/constants.dart';
 import 'package:ad_ranking_prototype/core/distance.dart';
 import 'package:ad_ranking_prototype/data/models/ad.dart';
 import 'package:ad_ranking_prototype/data/models/ad_event.dart';
+import 'package:ad_ranking_prototype/data/models/category.dart';
 import 'package:ad_ranking_prototype/data/models/user_location.dart';
 import 'package:ad_ranking_prototype/domain/ranking/ranking_weights.dart';
 
@@ -17,6 +18,7 @@ class RankingEngine {
     required UserLocation userLocation,
     required List<AdEvent> events,
     required DateTime now,
+    Map<Category, double> interestProfile = const {},
     int? limit,
   }) {
     if (ads.isEmpty) return const [];
@@ -56,8 +58,15 @@ class RankingEngine {
       final isStarved =
           lastShown == null || lastShown.isBefore(starvationCutoff);
 
+      final interestSum = ad.categories.fold<double>(
+        0.0,
+        (acc, cat) => acc + (interestProfile[cat] ?? 0.0),
+      );
+      final interestMatch = math.min(1.0, interestSum);
+
       final score = weights.tier * ad.tier.weight +
-          weights.proximity * proximityScore -
+          weights.proximity * proximityScore +
+          weights.interest * interestMatch -
           weights.decay * recentImpressions +
           (isStarved ? weights.starvation : 0.0);
 

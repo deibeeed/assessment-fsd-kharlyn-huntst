@@ -1,5 +1,6 @@
 import 'package:ad_ranking_prototype/data/models/ad.dart';
 import 'package:ad_ranking_prototype/data/models/ad_event.dart';
+import 'package:ad_ranking_prototype/data/models/category.dart';
 import 'package:ad_ranking_prototype/data/models/user_location.dart';
 import 'package:ad_ranking_prototype/domain/ranking/ranking_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -201,6 +202,81 @@ void main() {
         now: now,
       );
       expect(out.map((a) => a.id).toList(), ['AD1', 'AD2']);
+    });
+
+    test('interest_match boosts a matching ad above a higher-tier ad in a distant city', () {
+      final ads = [
+        Ad(
+          id: 'COFFEE_NEAR',
+          title: '',
+          description: '',
+          advertiserName: '',
+          tier: AdTier.silver,
+          latitude: userManila.latitude,
+          longitude: userManila.longitude,
+          categories: const [Category.coffee],
+        ),
+        const Ad(
+          id: 'NOCAT_FAR',
+          title: '',
+          description: '',
+          advertiserName: '',
+          tier: AdTier.gold,
+          latitude: 10.3157,
+          longitude: 123.8854,
+        ),
+      ];
+      final out = engine.rank(
+        ads: ads,
+        userLocation: userManila,
+        events: const [],
+        now: now,
+        interestProfile: const {Category.coffee: 1.0},
+      );
+      expect(out.map((a) => a.id).toList(), ['COFFEE_NEAR', 'NOCAT_FAR']);
+    });
+
+    test('multi-category overlap caps interest_match at 1.0', () {
+      final ads = [
+        Ad(
+          id: 'MULTI',
+          title: '',
+          description: '',
+          advertiserName: '',
+          tier: AdTier.bronze,
+          latitude: userManila.latitude,
+          longitude: userManila.longitude,
+          categories: const [Category.food, Category.coffee],
+        ),
+        Ad(
+          id: 'NOCAT',
+          title: '',
+          description: '',
+          advertiserName: '',
+          tier: AdTier.bronze,
+          latitude: userManila.latitude,
+          longitude: userManila.longitude,
+        ),
+      ];
+      final out = engine.rank(
+        ads: ads,
+        userLocation: userManila,
+        events: const [],
+        now: now,
+        interestProfile: const {Category.food: 0.6, Category.coffee: 0.6},
+      );
+      expect(out.first.id, 'MULTI');
+    });
+
+    test('empty interestProfile is identical to v1 behavior', () {
+      final out = engine.rank(
+        ads: [ad('B', AdTier.bronze), ad('G', AdTier.gold), ad('S', AdTier.silver)],
+        userLocation: userManila,
+        events: const [],
+        now: now,
+        interestProfile: const {},
+      );
+      expect(out.map((a) => a.id).toList(), ['G', 'S', 'B']);
     });
   });
 }
