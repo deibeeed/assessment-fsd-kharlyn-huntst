@@ -32,6 +32,17 @@ class HiveEventRepository implements EventRepository {
   }
 
   @override
+  Future<void> recordPostImpression(String postId) async {
+    await _box.add(
+      AdEvent(
+        adId: 'post:$postId',
+        type: EventType.impression,
+        timestamp: DateTime.now(),
+      ),
+    );
+  }
+
+  @override
   Future<List<AdEvent>> getEventsSince(DateTime since) async {
     return _box.values.where((e) => e.timestamp.isAfter(since)).toList();
   }
