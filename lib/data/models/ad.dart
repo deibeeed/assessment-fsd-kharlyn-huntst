@@ -1,3 +1,4 @@
+import 'package:ad_ranking_prototype/data/models/category.dart';
 import 'package:equatable/equatable.dart';
 
 enum AdTier {
@@ -21,6 +22,8 @@ class Ad extends Equatable {
     required this.tier,
     required this.latitude,
     required this.longitude,
+    this.imageUrl = '',
+    this.categories = const [],
   });
 
   final String id;
@@ -30,8 +33,19 @@ class Ad extends Equatable {
   final AdTier tier;
   final double latitude;
   final double longitude;
+  final String imageUrl;
+  final List<Category> categories;
 
   @override
-  List<Object?> get props =>
-      [id, title, description, advertiserName, tier, latitude, longitude];
+  List<Object?> get props => [
+        id,
+        title,
+        description,
+        advertiserName,
+        tier,
+        latitude,
+        longitude,
+        imageUrl,
+        categories,
+      ];
 }
