@@ -1,5 +1,6 @@
 import 'package:ad_ranking_prototype/core/theme.dart';
 import 'package:ad_ranking_prototype/data/models/ad_event.dart';
+import 'package:ad_ranking_prototype/data/models/ad_event_adapter.dart';
 import 'package:ad_ranking_prototype/data/repositories/ad_repository.dart';
 import 'package:ad_ranking_prototype/data/repositories/event_repository.dart';
 import 'package:ad_ranking_prototype/data/repositories/hive_event_repository.dart';
