@@ -40,4 +40,9 @@ class HiveReactionRepository implements ReactionRepository {
 
   @override
   Stream<Set<String>> likedPostIds() => _controller.stream;
+
+  @override
+  Future<void> close() async {
+    await _controller.close();
+  }
 }

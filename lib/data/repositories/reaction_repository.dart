@@ -5,4 +5,5 @@ abstract class ReactionRepository {
   Future<void> unlike(String postId);
   Future<List<PostLike>> getAllLikes();
   Stream<Set<String>> likedPostIds();
+  Future<void> close();
 }
