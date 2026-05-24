@@ -1,11 +1,11 @@
 import 'package:ad_ranking_prototype/data/models/ad.dart';
+import 'package:ad_ranking_prototype/data/models/category.dart';
 import 'package:ad_ranking_prototype/data/repositories/ad_repository.dart';
 
 class MockAdRepository implements AdRepository {
   @override
   Future<List<Ad>> getAll() async {
     return const [
-      // Manila (14.5995, 120.9842)
       Ad(
         id: 'jollibee-manila',
         title: 'Chickenjoy Bucket — 20% off today',
@@ -14,6 +14,9 @@ class MockAdRepository implements AdRepository {
         tier: AdTier.gold,
         latitude: 14.5995,
         longitude: 120.9842,
+        imageUrl:
+            'https://images.unsplash.com/photo-1562967914-608f82629710?w=600&h=600&fit=crop',
+        categories: [Category.food],
       ),
       Ad(
         id: 'globe-manila',
@@ -23,6 +26,9 @@ class MockAdRepository implements AdRepository {
         tier: AdTier.gold,
         latitude: 14.5547,
         longitude: 121.0244,
+        imageUrl:
+            'https://images.unsplash.com/photo-1551808525-51a94da548ce?w=600&h=600&fit=crop',
+        categories: [Category.tech],
       ),
       Ad(
         id: 'grab-manila',
@@ -32,6 +38,9 @@ class MockAdRepository implements AdRepository {
         tier: AdTier.silver,
         latitude: 14.6091,
         longitude: 121.0223,
+        imageUrl:
+            'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=600&fit=crop',
+        categories: [Category.food, Category.travel],
       ),
       Ad(
         id: 'localcafe-manila',
@@ -41,9 +50,10 @@ class MockAdRepository implements AdRepository {
         tier: AdTier.bronze,
         latitude: 14.6760,
         longitude: 121.0437,
+        imageUrl:
+            'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&h=600&fit=crop',
+        categories: [Category.coffee],
       ),
-
-      // Cebu (10.3157, 123.8854)
       Ad(
         id: 'ayala-cebu',
         title: 'Ayala Center Cebu mid-year sale',
@@ -52,6 +62,9 @@ class MockAdRepository implements AdRepository {
         tier: AdTier.gold,
         latitude: 10.3181,
         longitude: 123.9054,
+        imageUrl:
+            'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&h=600&fit=crop',
+        categories: [Category.fashion, Category.beauty],
       ),
       Ad(
         id: 'lechon-cebu',
@@ -61,6 +74,9 @@ class MockAdRepository implements AdRepository {
         tier: AdTier.silver,
         latitude: 10.3270,
         longitude: 123.9038,
+        imageUrl:
+            'https://images.unsplash.com/photo-1544025162-d76694265947?w=600&h=600&fit=crop',
+        categories: [Category.food],
       ),
       Ad(
         id: 'bookshop-cebu',
@@ -70,9 +86,10 @@ class MockAdRepository implements AdRepository {
         tier: AdTier.bronze,
         latitude: 10.3000,
         longitude: 123.9000,
+        imageUrl:
+            'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=600&h=600&fit=crop',
+        categories: [Category.books, Category.coffee],
       ),
-
-      // Davao (7.1907, 125.4553)
       Ad(
         id: 'durian-davao',
         title: 'Durian harvest fest — 15% off whole fruit',
@@ -81,6 +98,9 @@ class MockAdRepository implements AdRepository {
         tier: AdTier.silver,
         latitude: 7.0707,
         longitude: 125.6111,
+        imageUrl:
+            'https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?w=600&h=600&fit=crop',
+        categories: [Category.food],
       ),
       Ad(
         id: 'eagle-davao',
@@ -90,9 +110,10 @@ class MockAdRepository implements AdRepository {
         tier: AdTier.bronze,
         latitude: 7.1907,
         longitude: 125.4553,
+        imageUrl:
+            'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=600&h=600&fit=crop',
+        categories: [Category.travel],
       ),
-
-      // Baguio (16.4023, 120.5960)
       Ad(
         id: 'strawberry-baguio',
         title: 'Strawberry taho special — Mines View',
@@ -101,6 +122,9 @@ class MockAdRepository implements AdRepository {
         tier: AdTier.silver,
         latitude: 16.4140,
         longitude: 120.6228,
+        imageUrl:
+            'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=600&h=600&fit=crop',
+        categories: [Category.food, Category.travel],
       ),
     ];
   }
