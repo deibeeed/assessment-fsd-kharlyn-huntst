@@ -16,7 +16,7 @@ import 'package:ad_ranking_prototype/domain/ranking/ranking_engine.dart';
 import 'package:ad_ranking_prototype/presentation/analytics/bloc/analytics_bloc.dart';
 import 'package:ad_ranking_prototype/presentation/feed/bloc/feed_bloc.dart';
 import 'package:ad_ranking_prototype/presentation/feed/bloc/feed_event.dart';
-import 'package:ad_ranking_prototype/presentation/feed/view/feed_page.dart';
+import 'package:ad_ranking_prototype/presentation/shell/root_shell.dart';
 import 'package:ad_ranking_prototype/presentation/interest/cubit/interest_cubit.dart';
 import 'package:ad_ranking_prototype/presentation/location/cubit/location_cubit.dart';
 import 'package:ad_ranking_prototype/presentation/posts/bloc/post_bloc.dart';
@@ -111,7 +111,7 @@ class AdRankingApp extends StatelessWidget {
         title: 'Ad Ranking Prototype',
         theme: AppTheme.light(),
         darkTheme: AppTheme.dark(),
-        home: const FeedPage(),
+        home: const RootShell(),
         debugShowCheckedModeBanner: false,
       ),
     );
