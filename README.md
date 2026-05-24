@@ -20,6 +20,8 @@ Use the dropdown in the app bar to switch the mock user location (Manila / Cebu 
 
 Tap the heart on any post to like it. After 3–4 likes in the same category (food, coffee, etc.), the next sponsored ad slot will visibly favor that category — that's the interest signal feeding back into the ranking algorithm.
 
+The bottom navigation has two tabs: Home (the social feed) and Liked. The Liked tab shows your current interest profile (per-category percentages derived from likes) and the posts you've liked — useful for seeing why the next ad slot might favor a certain category.
+
 ---
 
 ## Architecture decisions
