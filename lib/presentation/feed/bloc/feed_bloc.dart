@@ -41,7 +41,9 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   }
 
   Future<void> _onRequested(FeedRequested event, Emitter<FeedState> emit) async {
-    emit(const FeedLoading());
+    if (state is! FeedLoaded) {
+      emit(const FeedLoading());
+    }
     try {
       final now = DateTime.now();
       final ads = await _adRepository.getAll();

@@ -109,7 +109,6 @@ void main() {
     },
     skip: 2,
     expect: () => [
-      const FeedLoading(),
       isA<FeedLoaded>().having(
         (s) => s.ads.first.id,
         'first ad after re-rank',
@@ -142,7 +141,6 @@ void main() {
     },
     skip: 2,
     expect: () => [
-      const FeedLoading(),
       isA<FeedLoaded>().having(
         (s) => s.ads.first.id,
         'first ad after interest change',
