@@ -7,7 +7,7 @@ A lightweight Flutter prototype that ranks advertiser ads by tier + proximity + 
 
 ## Quick start
 
-**Prerequisites:** Flutter SDK (stable channel, Dart 3+).
+**Prerequisites:** Flutter SDK, Dart 3+ (tested on Flutter 3.41.6 / Dart 3.11.4).
 
 ```bash
 flutter pub get
@@ -95,6 +95,7 @@ Sort descending. Take top N (default N = 10).
 | User identity / auth | Out of scope for prototype | OAuth or anonymous device ID |
 | A/B testing infra for weights | Out of scope | Feature flags + bandit-based tuning |
 | Widget + integration tests | Time budget | Listed in `docs/superpowers/specs/...` as future work |
+| Impression dedup + persisted in-memory analytics counters | Out of scope | Per-session seen-set + hydrate AnalyticsBloc from Hive on startup |
 | Cold-start, budget pacing, frequency capping | Out of scope | Discussed above |
 
 The test pyramid stops at Tier 2 (`bloc_test`) on purpose: the algorithm is where the bugs would live, and bloc tests cover the reactive plumbing. Widget tests on a 5-widget app would be ceremony without much bug-finding value.
