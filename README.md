@@ -18,6 +18,8 @@ flutter test                 # unit + bloc tests
 
 Use the dropdown in the app bar to switch the mock user location (Manila / Cebu / Davao / Baguio). The feed re-ranks immediately. Tap the refresh FAB to re-rank manually after impressions accumulate.
 
+Tap the heart on any post to like it. After 3–4 likes in the same category (food, coffee, etc.), the next sponsored ad slot will visibly favor that category — that's the interest signal feeding back into the ranking algorithm.
+
 ---
 
 ## Architecture decisions
@@ -70,6 +72,20 @@ Sort descending. Take top N (default N = 10).
 
 ---
 
+## Interest learning (the social loop)
+
+The feed mixes organic posts and sponsored ads in a 4:1 cadence (1 ad after every 4 posts). Each post and ad is tagged with one or more categories (food, coffee, fashion, travel, fitness, tech, beauty, books). Reactions on organic posts build a per-category interest profile, which the ranking algorithm consumes as a new term:
+
+```
++ W_interest × interest_match
+```
+
+where `interest_match = min(1.0, sum over ad.categories of profile[cat])`. With no reactions yet, the term is zero everywhere and the algorithm behaves exactly as v1. After a few likes, ads in matching categories get a meaningful boost — enough for a fresh Silver coffee ad to leap ahead of a heavily-shown Gold tech ad if the user has been liking coffee posts.
+
+The interest derivation lives in a pure `InterestService` so it could be swapped with an ML model (collaborative filtering, embeddings) without touching the bloc or the ranker.
+
+---
+
 ## How this would scale
 
 **Retrieval layer.** A request says "I'm in Cebu and looking at a food feed." A retrieval service (think Redis or a vector store) returns the top ~1000 candidate ads by region + category, pre-filtered for budget and frequency caps. Today's `MockAdRepository` is the placeholder for this layer.
@@ -96,6 +112,8 @@ Sort descending. Take top N (default N = 10).
 | A/B testing infra for weights | Out of scope | Feature flags + bandit-based tuning |
 | Widget + integration tests | Time budget | Listed in `docs/superpowers/specs/...` as future work |
 | Impression dedup + persisted in-memory analytics counters | Out of scope | Per-session seen-set + hydrate AnalyticsBloc from Hive on startup |
+| Interest decay over time | Out of scope | Time-weighted reactions: recent likes count more (exponential decay) |
+| Negative signals (downvote, "not interested") | Out of scope | Per-user blocklist + negative weighting in the ranker |
 | Cold-start, budget pacing, frequency capping | Out of scope | Discussed above |
 
 The test pyramid stops at Tier 2 (`bloc_test`) on purpose: the algorithm is where the bugs would live, and bloc tests cover the reactive plumbing. Widget tests on a 5-widget app would be ceremony without much bug-finding value.
@@ -111,3 +129,5 @@ Claude (`Opus 4.7` via Claude Code) was used as a brainstorming and boilerplate 
 - **README polish** — first draft of this README, then edited by hand.
 
 **Not from AI:** the choice to use Hive over Drift (driven by my own concern about Drift's web story), the decision to bump bloc tests to a must-have tier, the call to use Material 3 explicitly. Final weight values, formula trade-offs, and the "deterministic over probabilistic" choice were all deliberate decisions reviewed before committing.
+
+The v2 evolution from an ads-only ranker into a mixed social feed with interest learning was also brainstormed with Claude through the same spec → plan → subagent-driven execution loop. See `docs/superpowers/specs/2026-05-24-social-feed-with-interest-learning-design.md` and the corresponding plan for the design conversation.
